@@ -11,7 +11,7 @@ import ms.checkout.checkoutms.entity.User;
 import ms.checkout.checkoutms.repository.RobotRepository;
 import ms.checkout.checkoutms.repository.UserRepository;
 
-@CrossOrigin({"http://localhost:4200", "https://eng-dev.herokuapp.com", "https://project13-test.herokuapp.com/"})
+@CrossOrigin({"http://localhost:4200", "https://eng-dev.herokuapp.com", "https://project13-test.herokuapp.com"})
 @RestController
 public class CheckoutController {
     @Autowired
