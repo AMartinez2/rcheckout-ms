@@ -32,25 +32,25 @@ public class CheckoutController {
         return true;
     }
 
-    @GetMapping("/getPrice/{robots}")
-    public int getRobotPrice(@PathVariable String[] robots) {
+    @GetMapping("/getPrice/{robots}/{amounts}")
+    public int getRobotPrice(@PathVariable String[] robots,@PathVariable int[] amounts) {
         int price = 0;
         for (int i = 0; i < robots.length; i++) {
             Robot robot = robotRepository.findByName(robots[i]);
-            price += robot.getPrice();
+            price += robot.getPrice() * amounts[i];
         }
         return price;
     }
 
     @GetMapping("/updateRobot/{robotName}/{amount}")
-    public boolean updateRobot(@PathVariable String robotName, @PathVariable int amount) {
+    public Robot updateRobot(@PathVariable String robotName, @PathVariable int amount) {
         Robot robot = robotRepository.findByName(robotName);
         int stock = robot.getStock();
         if (stock < amount) {
-            return false;
+            return robotRepository.findByName("-1");
         }
         robot.setStock(stock - amount);
         robotRepository.save(robot);
-        return true;
+        return robotRepository.findByName(robotName);
     }
 }
