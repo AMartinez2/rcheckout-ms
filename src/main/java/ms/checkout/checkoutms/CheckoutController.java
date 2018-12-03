@@ -37,7 +37,7 @@ public class CheckoutController {
         Robot robot = robotRepository.findByName(robotName);
         int price[] = new int[1];
         price[0] = robot.getPrice();
-        return "{"+price[0]+"}";
+        return "{'price':'"+price[0]+"'}";
     }
 
     @GetMapping("/updateRobot/{robotName}/{amount}")
