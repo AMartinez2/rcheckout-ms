@@ -32,10 +32,14 @@ public class CheckoutController {
         return true;
     }
 
-    @GetMapping("/getPrice/{robotName}")
-    public Robot getRobotPrice(@PathVariable String robotName) {
-        Robot robot = robotRepository.findByName(robotName);
-        return robot;
+    @GetMapping("/getPrice/{robots}")
+    public int getRobotPrice(@PathVariable String[] robots) {
+        int price = 0;
+        for (int i = 0; i < robots.length; i++) {
+            Robot robot = robotRepository.findByName(robots[i]);
+            price += robot.getPrice();
+        }
+        return price;
     }
 
     @GetMapping("/updateRobot/{robotName}/{amount}")
