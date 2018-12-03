@@ -21,15 +21,15 @@ public class CheckoutController {
     UserRepository userRepository;
 
     @GetMapping("/user/{userName}/{price}")
-    public boolean reduceCredit(@PathVariable String userName, @PathVariable int price) {
+    public User reduceCredit(@PathVariable String userName, @PathVariable int price) {
         User user = userRepository.findByUsid(userName);
-        int balance = user.getBalance();
-        if (price > balance) {
-            return false;
+        int stock = user.getBalance();
+        if (stock < price) {
+            return userRepository.findByUsid("-1");
         }
-        user.setBalance(balance-price);
+        user.setBalance(stock - price);
         userRepository.save(user);
-        return true;
+        return userRepository.findByUsid(userName);
     }
 
     @GetMapping("/getPrice/{robots}/{amounts}")
