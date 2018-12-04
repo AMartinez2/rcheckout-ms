@@ -42,11 +42,11 @@ public class CheckoutController {
         return price;
     }
 
-    @GetMapping("/checkStock/{robotName}/{amount}")
-    public Robot checkStock(@PathVariable String[] robotNames, @PathVariable int[] amount) {
+    @GetMapping("/checkStock/{robotNames}/{amounts}")
+    public Robot checkStock(@PathVariable String[] robotNames, @PathVariable int[] amounts) {
         for (int i = 0; i < robotNames.length; i++) {
             Robot robot = robotRepository.findByName(robotNames[i]);
-            if (robot.getStock() < amount[i]) {
+            if (robot.getStock() < amounts[i]) {
                 return robotRepository.findByName("-1");
             }
         }
