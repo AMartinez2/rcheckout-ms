@@ -41,8 +41,8 @@ public class CheckoutController {
         }
         return price;
     }
-    @GetMapping("checkStock/{robotName}/{stock}")
-    public Boolean checkStock(@PathVariable String robotName, @PathVariable int stock) {
+    
+    public Boolean checkStock(String robotName, int stock) {
         Robot robot = robotRepository.findByName(robotName);
         if (robot.getStock() < stock) {
             return false;
@@ -52,6 +52,9 @@ public class CheckoutController {
 
     @GetMapping("/updateRobot/{robotName}/{amount}")
     public Robot updateRobot(@PathVariable String robotName, @PathVariable int amount) {
+        if (!checkStock(robotName, amount)) {
+            return robotRepository.findByName("-1");
+        }
         Robot robot = robotRepository.findByName(robotName);
         int stock = robot.getStock();
         if (stock < amount) {
