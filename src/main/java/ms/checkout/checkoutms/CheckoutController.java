@@ -41,27 +41,26 @@ public class CheckoutController {
         }
         return price;
     }
-    
-    public Boolean checkStock(String robotName, int stock) {
-        Robot robot = robotRepository.findByName(robotName);
-        if (robot.getStock() < stock) {
-            return false;
+
+    @GetMapping("/checkStock/{robotName}/{amount}")
+    public Robot checkStock(@PathVariable String[] robotNames, @PathVariable int[] amount) {
+        for (int i = 0; i < robotNames.length; i++) {
+            Robot robot = robotRepository.findByName(robotNames[i]);
+            if (robot.getStock() < amount[i]) {
+                return robotRepository.findByName("-1");
+            }
         }
-        return true;
+        return robotRepository.findByName(robotNames[0]);
     }
 
     @GetMapping("/updateRobot/{robotName}/{amount}")
-    public Robot updateRobot(@PathVariable String robotName, @PathVariable int amount) {
-        if (!checkStock(robotName, amount)) {
-            return robotRepository.findByName("-1");
+    public Robot updateRobot(@PathVariable String[] robotNames, @PathVariable int[] amount) {
+        for (int i = 0; i < robotNames.length; i++) {
+            Robot robot = robotRepository.findByName(robotNames[i]);
+            int stock = robot.getStock();
+            robot.setStock(stock - amount[i]);
+            robotRepository.save(robot);
         }
-        Robot robot = robotRepository.findByName(robotName);
-        int stock = robot.getStock();
-        if (stock < amount) {
-            return robotRepository.findByName("-1");
-        }
-        robot.setStock(stock - amount);
-        robotRepository.save(robot);
-        return robotRepository.findByName(robotName);
+        return robotRepository.findByName(robotNames[0]);
     }
 }
