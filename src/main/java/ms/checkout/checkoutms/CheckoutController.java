@@ -43,14 +43,14 @@ public class CheckoutController {
     }
 
     @GetMapping("/checkStock/{robotNames}/{amounts}")
-    public boolean checkStock(@PathVariable String[] robotNames, @PathVariable int[] amounts) {
+    public Robot checkStock(@PathVariable String[] robotNames, @PathVariable int[] amounts) {
         for (int i = 0; i < robotNames.length; i++) {
             Robot robot = robotRepository.findByName(robotNames[i]);
             if (robot.getStock() < amounts[i]) {
-                return false;
+                return robot = robotRepository.findByName("-1");
             }
         }
-        return true;
+        return robotRepository.findByName(robotNames[0]);
     }
 
     @GetMapping("/updateRobot/{robotName}/{amount}")
