@@ -53,12 +53,15 @@ public class CheckoutController {
         return robotRepository.findByName(robotNames[0]);
     }
 
-    @GetMapping("/updateRobot/{robotName}/{amount}")
-    public Robot updateRobot(@PathVariable String[] robotNames, @PathVariable int[] amount) {
+    @GetMapping("/updateRobot/{robotNames}/{amounts}")
+    public Robot updateRobot(@PathVariable String[] robotNames, @PathVariable int[] amounts) {
         for (int i = 0; i < robotNames.length; i++) {
             Robot robot = robotRepository.findByName(robotNames[i]);
             int stock = robot.getStock();
-            robot.setStock(stock - amount[i]);
+            if (robot.getStock() < amounts[i]) {
+                return robotRepository.findByName("-1");
+            }
+            robot.setStock(stock - amounts[i]);
             robotRepository.save(robot);
         }
         return robotRepository.findByName(robotNames[0]);
